@@ -1,16 +1,43 @@
+/**
+ * JavaScript Inheritance solution
+ * Clear names and methods, for development purposes
+ * 
+**/
 var Class = (function() {
-    var Class = function(Constructor) {
+    // the Class super-constructor, a classes builder factory:
+    function Class(Constructor) {
         if (typeof(Constructor) === 'function') {
+            // invoekd as class builder:
             return extend(Class, Constructor);
+        } else if (this instanceof Class) {
+            // invoked as constructor:
+            return this;
         }
     };
     
+    // reflective method to create an instances of a class:
+    Class.construct = function construct() {
+        return construct(this, arguments);
+    }
+    
+    // method for extension of the Class super-constructor itself:
     Class.extend = function(Child) {
         return extend(this, Child);
     }
 
+    Class.parent = Class;
+    
+    function construct(Constructor, args) {
+        // inform the constructor that it's being reflected:
+        Constructor.reflecting = true;
+        // get the instance:
+        var reflection = new Constructor(arguments);
+        delete Constructor.reflecting;
+        return reflection;
+    }
+    
     function extend(Parent, Child) {
-        if (typeof(Child) !== 'function') {
+        if (typeof(Parent) !== 'function' || typeof(Child) !== 'function') {
             return;
         }
         
@@ -26,36 +53,27 @@ var Class = (function() {
         Child.prototype.parent = parent;
         
         // Proxy constructor:
-        function Class() {
-            if (this instanceof Class && 'init' in this && Class.extending !== true) {
-                this.init.apply(this, Class.reflecting === true ? arguments[0] : arguments);
+        function Proxy() {
+            if (this instanceof Proxy && 'init' in this && Proxy.extending !== true) {
+                this.init.apply(this, Proxy.reflecting === true ? arguments[0] : arguments);
             }
         };
         
-        // create an uninitialized instance:
+        // get an uninitialized instance of the Child:
         var instance = new Child();
         // adjust the instance constructor:
-        instance.constructor = Class;
+        instance.constructor = Proxy;
         // inherit from the constructor:
-        Class.prototype = instance;
+        Proxy.prototype = instance;
         // save in the proxy constructor a reference to the primary constructor:
-        Class.assignee = Child;
+        Proxy.assignee = Child;
         // make it extensible and reflectable:
-        Class.extend = Parent.extend;
-        Class.construct = Parent.construct;
+        Proxy.extend = Parent.extend;
+        Proxy.construct = Parent.construct;
         
-        return Class;
+        return Proxy;
     };
-    
-    Class.construct = function construct() {
-        // inform the constructor that it's being reflected:
-        this.reflecting = true;
-        var reflection = new this(arguments);
-        delete this.reflecting;
-        return reflection;
-    }
-    
-    Class.parent = Class;
-    
+
     return Class;
 })();
+
