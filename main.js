@@ -58,7 +58,7 @@ var Class = (function() {
         // Proxy constructor:
         function Class() {
             return build(this, Class, false, arguments);
-        };
+        }
         
         // create an uninitialized instance:
         var instance = new Child();
@@ -73,7 +73,7 @@ var Class = (function() {
         Class.construct = Parent.construct;
         
         return Class;
-    };
+    }
 
     return Class;
 })();
