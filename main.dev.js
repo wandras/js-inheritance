@@ -1,4 +1,3 @@
-<script>
 /**
  * JavaScript Inheritance solution
  * Clear names and methods, for development purposes
