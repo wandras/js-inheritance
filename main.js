@@ -1,45 +1,52 @@
 var Class = (function() {
     var Class = function(Constructor) {
         if (typeof(Constructor) === 'function') {
-            return Class.extend(Constructor);
+            return extend(Class, Constructor);
         }
     };
+    
+    Class.extend = function(Child) {
+        return extend(this, Child);
+    }
 
-    Class.extend = function extend(Child) {
+    function extend(Parent, Child) {
         if (typeof(Child) !== 'function') {
             return;
         }
-
+        
         // inform the constructor that it's being extendd:
-        this.extending = true;
+        Parent.extending = true;
         // get an uninitialized instance of the parent:
-        var parent = new this();
-        delete this.extending;
-
+        var parent = new Parent();
+        delete Parent.extending;
+        
+        // inherit from the parent:
         Child.prototype = parent;
         // reference the parent prototype instance in a reserved attribute:
         Child.prototype.parent = parent;
-
+        
         // Proxy constructor:
-        function Proxy() {
-            if (this instanceof Proxy && 'init' in this && Proxy.extending !== true) {
-                this.init.apply(this, Proxy.reflecting === true ? arguments[0] : arguments);
+        function Class() {
+            if (this instanceof Class && 'init' in this && Class.extending !== true) {
+                this.init.apply(this, Class.reflecting === true ? arguments[0] : arguments);
             }
         };
-
+        
         // create an uninitialized instance:
         var instance = new Child();
+        // adjust the instance constructor:
+        instance.constructor = Class;
         // inherit from the constructor:
-        Proxy.prototype = instance;
-        // save in the Proxy a reference to the primary constructor:
-        Proxy.assignee = Child;
+        Class.prototype = instance;
+        // save in the proxy constructor a reference to the primary constructor:
+        Class.assignee = Child;
         // make it extensible and reflectable:
-        Proxy.extend = Class.extend;
-        Proxy.construct = Class.construct;
-
-        return Proxy;
+        Class.extend = Parent.extend;
+        Class.construct = Parent.construct;
+        
+        return Class;
     };
-
+    
     Class.construct = function construct() {
         // inform the constructor that it's being reflected:
         this.reflecting = true;
@@ -47,8 +54,8 @@ var Class = (function() {
         delete this.reflecting;
         return reflection;
     }
-
+    
     Class.parent = Class;
-
+    
     return Class;
 })();
