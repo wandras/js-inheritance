@@ -1,10 +1,11 @@
 /**
- * JavaScript Inheritance solution
+ * 
+ * JavaScript Inheritance solution - Plug FW
  * Clear names and methods, for development purposes
  * 
 **/
 var Class = (function() {
-    // the Class super-constructor, a classes builder factory:
+    // the Class super-constructor, a classes-builder factory:
     function Class(Constructor) {
         if (typeof(Constructor) === 'function') {
             // invoekd as class builder:
@@ -21,10 +22,10 @@ var Class = (function() {
     }
     
     // method for extension of the Class super-constructor itself:
-    Class.extend = function(Child) {
+    Class.extend = function extend(Child) {
         return extend(this, Child);
     }
-
+    
     Class.parent = Class;
     
     function construct(Constructor, args) {
@@ -73,6 +74,6 @@ var Class = (function() {
         
         return Proxy;
     }
-
+    
     return Class;
 })();
