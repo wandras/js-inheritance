@@ -53,8 +53,6 @@ var Class = (function() {
         
         // inherit from the parent:
         Child.prototype = parent;
-        // reference the parent prototype instance in a reserved attribute:
-        Child.prototype.parent = parent;
         
         // Proxy constructor:
         function Class() {
@@ -63,6 +61,8 @@ var Class = (function() {
         
         // create an uninitialized instance:
         var instance = new Child();
+        // reference the parent instance:
+        instance.parent = parent;
         // set the instance constructor:
         instance.constructor = Class;
         // inherit from the constructor:
