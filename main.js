@@ -27,7 +27,7 @@ var Class = (function() {
             // invoking Class super-constructor as a constructor:
             return instance;
         } else if (instance instanceof Parent && 'init' in instance && Parent.extending !== true) {
-            // invoking a proxy constructor:
+            // invoking a class constructor:
             instance.init.apply(instance, Parent.reflecting === true ? args[0] : args);
         }
     }
@@ -63,12 +63,15 @@ var Class = (function() {
         
         // create an uninitialized instance:
         var instance = new Child();
-        // adjust the instance constructor:
+        // set the instance constructor:
         instance.constructor = Class;
         // inherit from the constructor:
         Class.prototype = instance;
-        // save in the proxy constructor a reference to the primary constructor:
+        
+        // save in the proxy constructor a reference to the parent and the primary constructor:
+        Class.parent = Parent;
         Class.assignee = Child;
+        
         // make it extensible and reflectable:
         Class.extend = Parent.extend;
         Class.construct = Parent.construct;
