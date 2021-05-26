@@ -1,5 +1,6 @@
 /**
  * JavaScript Inheritance solution - Plug FW
+ * Based on native prototypal chain inheritance
  * Shadowing of names and methods, for a minimal footprint.
  * 
 **/
@@ -8,11 +9,11 @@ var Class = (function() {
         return build(this, Class, Constructor);
     }
     
-    Class.construct = function construct() {
+    Class.construct = function() {
         return construct(this, arguments);
     }
     
-    Class.extend = function extend(Child) {
+    Class.extend = function(Child) {
         return extend(this, Child);
     }
 
@@ -23,7 +24,7 @@ var Class = (function() {
             // invoking Class super-constructor as class builder:
             return extend(Parent, Constructor);
         } else if (instance instanceof Parent) {
-            // invoking Class super constructor as constructor:
+            // invoking Class super-constructor as a constructor:
             return instance;
         } else if (instance instanceof Parent && 'init' in instance && Parent.extending !== true) {
             // invoking a proxy constructor:
