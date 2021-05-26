@@ -11,7 +11,7 @@ var Class = (function() {
             // invoked as class builder:
             return extend(Class, Constructor);
         } else if (this instanceof Class) {
-            // invoked as constructor:
+            // invoked as a constructor:
             return this;
         }
     };
@@ -47,11 +47,8 @@ var Class = (function() {
         // get an uninitialized instance of the parent:
         var parent = new Parent();
         delete Parent.extending;
-        
         // inherit from the parent:
         Child.prototype = parent;
-        // reference the parent prototype instance in a reserved attribute:
-        Child.prototype.parent = parent;
         
         // Proxy constructor:
         function Proxy() {
@@ -62,15 +59,17 @@ var Class = (function() {
         
         // get an uninitialized instance of the Child:
         var instance = new Child();
+        // reference the parent instance:
+        instance.parent = parent;
         // set the instance constructor:
         instance.constructor = Proxy;
         // inherit from the constructor:
         Proxy.prototype = instance;
-        
+
         // save in the proxy constructor a reference to the parent and the primary constructor:
         Proxy.parent = Parent;
         Proxy.assignee = Child;
-        
+
         // make it extensible and reflectable:
         Proxy.extend = Parent.extend;
         Proxy.construct = Parent.construct;
