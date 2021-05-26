@@ -1,6 +1,6 @@
 /**
- * 
  * JavaScript Inheritance solution - Plug FW
+ * Based on native prototypal chain inheritance
  * Clear names and methods, for development purposes
  * 
 **/
@@ -17,12 +17,12 @@ var Class = (function() {
     };
     
     // reflective method to create an instances of a class:
-    Class.construct = function construct() {
+    Class.construct = function() {
         return construct(this, arguments);
     }
     
     // method for extension of the Class super-constructor itself:
-    Class.extend = function extend(Child) {
+    Class.extend = function(Child) {
         return extend(this, Child);
     }
     
@@ -58,7 +58,7 @@ var Class = (function() {
             if (this instanceof Proxy && 'init' in this && Proxy.extending !== true) {
                 this.init.apply(this, Proxy.reflecting === true ? arguments[0] : arguments);
             }
-        };
+        }
         
         // get an uninitialized instance of the Child:
         var instance = new Child();
