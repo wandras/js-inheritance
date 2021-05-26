@@ -8,7 +8,7 @@ var Class = (function() {
     // the Class super-constructor, a classes-builder factory:
     function Class(Constructor) {
         if (typeof(Constructor) === 'function') {
-            // invoekd as class builder:
+            // invoked as class builder:
             return extend(Class, Constructor);
         } else if (this instanceof Class) {
             // invoked as constructor:
@@ -62,12 +62,15 @@ var Class = (function() {
         
         // get an uninitialized instance of the Child:
         var instance = new Child();
-        // adjust the instance constructor:
+        // set the instance constructor:
         instance.constructor = Proxy;
         // inherit from the constructor:
         Proxy.prototype = instance;
-        // save in the proxy constructor a reference to the primary constructor:
+        
+        // save in the proxy constructor a reference to the parent and the primary constructor:
+        Proxy.parent = Parent;
         Proxy.assignee = Child;
+        
         // make it extensible and reflectable:
         Proxy.extend = Parent.extend;
         Proxy.construct = Parent.construct;
