@@ -1,5 +1,5 @@
 /**
- * JavaScript Inheritance solution
+ * JavaScript Inheritance solution - Plug FW
  * Shadowing of names and methods, for a minimal footprint.
  * 
 **/
@@ -12,7 +12,7 @@ var Class = (function() {
         return construct(this, arguments);
     }
     
-    Class.extend = function(Child) {
+    Class.extend = function extend(Child) {
         return extend(this, Child);
     }
 
@@ -74,6 +74,6 @@ var Class = (function() {
         
         return Class;
     }
-
+    
     return Class;
 })();
