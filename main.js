@@ -35,7 +35,7 @@ var Class = (function() {
     function construct(Constructor, args) {
         // inform the constructor that it's being reflected:
         Constructor.reflecting = true;
-        var reflection = new Constructor(arguments);
+        var reflection = new Constructor(args);
         delete Constructor.reflecting;
         return reflection;
     }
